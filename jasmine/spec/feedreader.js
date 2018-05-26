@@ -44,33 +44,22 @@ $(function() {
           });
           // Tests if the loadFeed function has at least a single entry
           it('Feed has at least a single entry', function () {
-            let entryNumber = $('.entry').length;
-            expect(entryNumber).toBeGreaterThan(0);
+             expect($('.feed .entry').length).toBeGreaterThan(0);
           });
     });
     // New test suite that looks for new feed selections
     describe('New Feed Selection', function() {
-      var firstFeed, secondFeed;
-      // Ensures that the new feed is loaded via the loadFeed function
-      beforeEach(function(done) {
-              loadFeed(1, function() {
-                  // Tests if first feed is loaded
-                  firstFeed = $('.feed').html();
-                  loadFeed(2, function() {
-                      // Tests if second feed is loaded
-                      done();
-                    });
-                });
-            });
-              afterEach(function() {
-                loadFeed(0);
-            });
-        // Tests to see if two entries are not equal
-           it('Two entries are different', function() {
-                expect(firstFeed).toBeDefined();
-                secondFeed = $('.feed').html();
-                expect(secondFeed).toBeDefined();
-                expect(firstFeed).not.toEqual(secondFeed);
-            });
-    });
-}());
+       let oldFeed;
+       beforeEach(function(done) {
+           loadFeed(0, function() {
+               oldFeed = $('.feed').html();
+               // newer feed
+               loadFeed(1, done);
+           });
+       });
+
+       it('Two entries are different', function() {
+           expect($('.feed').html()).not.toBe(oldFeed);
+       });
+   });
+   }());
